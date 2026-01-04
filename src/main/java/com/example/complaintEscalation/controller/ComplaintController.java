@@ -7,6 +7,7 @@ import com.example.complaintEscalation.model.User;
 import com.example.complaintEscalation.service.ComplaintService;
 import com.example.complaintEscalation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -47,6 +48,19 @@ public class ComplaintController {
     @GetMapping("/status")
     public List<Complaint> getComplaintsByStatus(@RequestParam ComplaintStatus status){
         return complaintService.getByStatus(status);
+    }
+
+
+    //update status
+    @PutMapping("/{id}/status")
+    public ResponseEntity<Complaint> updateStatus(@PathVariable int id,@RequestParam ComplaintStatus status){
+        return ResponseEntity.ok(complaintService.updateStatus(id,status));
+    }
+
+    //Assign staff
+    @PutMapping("/{id}/assign")
+    public ResponseEntity<Complaint> assignStaff(@PathVariable int id,@RequestParam String staffName){
+        return ResponseEntity.ok(complaintService.assignStaff(id,staffName));
     }
 
 }

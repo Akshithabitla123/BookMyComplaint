@@ -6,6 +6,7 @@ import com.example.complaintEscalation.repository.ComplaintRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -38,6 +39,22 @@ public class ComplaintService {
     //get list of complaints by its status
     public List<Complaint> getByStatus(ComplaintStatus status){
         return complaintRepo.findByStatus(status);
+    }
+
+    //update status of complaint
+    public Complaint updateStatus(int complaintId,ComplaintStatus status){
+        Complaint complaint=complaintRepo.findById(complaintId).orElseThrow(()->new RuntimeException("Complaint not found"));
+        complaint.setStatus(status);
+        complaint.setUpdatedAt(LocalDateTime.now());
+        return complaintRepo.save(complaint);
+    }
+
+    //assign staff to the complaint
+    public Complaint assignStaff(int complaintId, String staffName){
+        Complaint complaint=complaintRepo.findById(complaintId).orElseThrow(()->new RuntimeException("Complaint not found"));
+        complaint.setAssignedStaff(staffName);
+        complaint.setUpdatedAt(LocalDateTime.now());
+        return complaintRepo.save(complaint);
     }
 
 }

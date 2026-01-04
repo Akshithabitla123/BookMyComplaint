@@ -20,6 +20,9 @@ public class Complaint {
     private ComplaintStatus status;
 
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private String assignedStaff;
+
 
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false)
@@ -71,5 +74,22 @@ public class Complaint {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+
+    public String getAssignedStaff() {
+        return assignedStaff;
+    }
+
+    public void setAssignedStaff(String assignedStaff) {
+        this.assignedStaff = assignedStaff;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
