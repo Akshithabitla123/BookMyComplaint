@@ -57,4 +57,15 @@ public class ComplaintService {
         return complaintRepo.save(complaint);
     }
 
+    //filter by area,status, date range
+    public List<Complaint> findByArea(String area){
+        return complaintRepo.findByAreaIgnoreCase(area);
+    }
+    public List<Complaint> findByStatus(ComplaintStatus status){
+        return complaintRepo.findByStatus(status);
+    }
+    public List<Complaint> findByDate(LocalDateTime from, LocalDateTime to){
+        return complaintRepo.findByCreatedAtBetween(from, to);
+    }
+
 }

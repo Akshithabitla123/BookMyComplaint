@@ -15,6 +15,7 @@ public class Complaint {
 
     private String title;
     private String description;
+    private String area;
 
     @Enumerated(EnumType.STRING)
     private ComplaintStatus status;
@@ -91,5 +92,13 @@ public class Complaint {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 }

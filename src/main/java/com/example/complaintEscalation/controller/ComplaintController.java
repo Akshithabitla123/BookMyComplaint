@@ -63,4 +63,20 @@ public class ComplaintController {
         return ResponseEntity.ok(complaintService.assignStaff(id,staffName));
     }
 
+    //filter complaints (only for staff)
+    @GetMapping("/staff/filter/area")
+    public List<Complaint> filterByArea(@RequestParam String area){
+        return complaintService.findByArea(area);
+    }
+    @GetMapping("/staff/filter/status")
+    public List<Complaint> filterByStatus(@RequestParam ComplaintStatus status){
+        return complaintService.findByStatus(status);
+    }
+    @GetMapping("/staff/filter/date")
+    public List<Complaint> filterByArea(@RequestParam LocalDateTime from,@RequestParam LocalDateTime to){
+        return complaintService.findByDate(from,to);
+    }
+
+
+
 }
