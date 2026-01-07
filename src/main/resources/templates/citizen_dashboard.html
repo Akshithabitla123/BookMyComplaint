@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Citizen Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h2 id="welcomeText">Welcome, Citizen</h2>
+    <div class="buttons">
+        <button onclick="goToCreate()">Create Complaint</button>
+        <button onclick="goToMyComplaints()">View my complaints</button>
+        <button class="logout" onclick="logout()">Logout </button>
+    </div>
+</div>
+
+<script>
+    const userId=localStorage.getItem("userId");
+    const role=localStorage.getItem("role");
+
+<!--    if(!userId || role!=="CITIZEN"){-->
+<!--        alert("Unauthorized access");-->
+<!--        window.location.href="citizen_login.html";-->
+<!--    }-->
+
+    function goToCreate(){
+        window.location.href="create_complaint.html";
+    }
+    function goToMyComplaints(){
+        window.location.href="view_complaint.html";
+    }
+
+    function logout(){
+        localStorage.clear();
+        window.location.href="index.html";
+    }
+
+
+</script>
+
+</body>
+</html>

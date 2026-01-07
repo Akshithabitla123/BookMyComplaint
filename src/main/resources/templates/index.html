@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Complaint Escalation System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Complaint Escalation System</h1>
+
+    <div class="buttons">
+        <button onclick="goTo('citizen')">Citizen</button>
+        <button onclick="goTo('staff')">Staff</button>
+        <button onclick="goTo('admin')">Admin</button>
+    </div>
+</div>
+
+<script>
+    function goTo(role){
+        window.location.href="citizen_login.html";
+    }
+</script>
+
+</body>
+</html>

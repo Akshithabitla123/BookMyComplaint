@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Complaints</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <h2>Your Complaints</h2>
+    <table id="complaint_table">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Created At</th>
+            <th>Assigned Staff</th>
+            <th>Status</th>
+            <th>Updated At</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <p class="back" onclick="back()">Back to dashboard</p>
+</div>
+<script>
+    const user=JSON.parse(localStorage.getItem("loggedInUser"));
+
+    if (!user) {
+        alert("Please login first");
+        window.location.href = "citizen_login.html";
+    }
+
+fetch(`http://localhost:8080/complaints/user/${user.userId}`)
+    .then(response => response.json())
+    .then(data => {
+        const table = document.getElementById("complaint_table");
+
+        if(data.length === 0){
+            table.innerHTML += `<tr><td colspan="4">No complaints found</td></tr>`;
+            return;
+        }
+
+        data.forEach(c => {
+            const row = `
+                <tr>
+                    <td>${c.title}</td>
+                    <td>${c.description}</td>
+                    <td>${c.createdAt ? c.createdAt.replace('T',' ') : 'N/A'}</td>
+                    <td>${c.assignedStaff}</td>
+                    <td>${c.status}</td>
+                    <td>${c.updatedAt ? c.updatedAt.replace('T',' ') : 'N/A'}</td>
+
+                </tr>
+            `;
+            table.innerHTML += row;
+        });
+    })
+
+
+    function back() {
+        window.location.href = "citizen_dashboard.html";
+    }
+</script>
+
+</body>
+</html>
