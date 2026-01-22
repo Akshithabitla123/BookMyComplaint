@@ -43,7 +43,6 @@ public class UserService {
 
 
     public User login(String email, String pass) {
-        User user = userRepo.findByEmailAndPass(email,pass);
-        return user;
+        return userRepo.findByEmailAndPass(email,pass);
     }
 }

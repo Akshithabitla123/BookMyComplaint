@@ -110,4 +110,58 @@ tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
+.newContainer {
+    background: white;
+    padding: 40px;
+    border-radius: 8px;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+
+.admin-container {
+    width: 100%;
+    min-height: 100vh;
+    padding: 20px;
+    background-color: #f4f6f9;
+}
+
+.filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.filters input,
+.filters select {
+    padding: 8px;
+    min-width: 180px;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    white-space: nowrap;
+}
+
+th {
+    background-color: #2563eb;
+    color: white;
+}
+
+
+
 

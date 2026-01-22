@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="admin_dashboard.css">
+
+</head>
+<body>
+
+<div class="admin-container">
+    <h2>Admin Dashboard</h2>
+
+    <!--Filters -->
+    <div class="filters">
+
+        <select id="filterType" onchange="onFilterChange()">
+            <option value="">Select Filter</option>
+            <option value="title">Title</option>
+            <option value="area">Area</option>
+            <option value="status">Status</option>
+        </select>
+        <input type="text" id="areaInput" placeholder="Enter Area" style="display:none">
+        <input type="text" id="titleInput" placeholder="Enter Title" style="display:none">
+
+        <select id="statusInput" style="display:none">
+            <option value="">ALL</option>
+            <option value="OPEN">OPEN</option>
+            <option value="IN_PROGRESS">IN_PROGRESS</option>
+            <option value="RESOLVED">RESOLVED</option>
+            <option value="REJECTED">REJECTED</option>
+        </select>
+
+        <button onclick="applyFilter()">Filter</button>
+        <button onclick="loadComplaints()">Reset</button>
+    </div>
+
+    <!--Complaints Table -->
+    <div class="table-container">
+    <table id="complaintTable">
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Area</th>
+            <th>Status</th>
+            <th>Assigned staff</th>
+            <th>Assign Staff</th>
+        </tr>
+    </table>
+    </div>
+
+    <button onclick="logout()">Logout</button>
+</div>
+
+<script src="hello.js"></script>
+
+</body>
+</html>

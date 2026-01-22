@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <h2>Admin Login Page</h2>
+
+    <input  type="email" id="email" placeholder="Email">
+    <input type="password" id="pass" placeholder="Password">
+    <div class="buttons">
+        <button onclick="login()">Login</button>
+    </div>
+
+</div>
+
+<script>
+    function login(){
+        const email=document.getElementById("email").value;
+        const pass=document.getElementById("pass").value;
+        if(!email || !pass){
+            alert("Credentials missing");
+<!--            return;-->
+        }
+        fetch("http://localhost:8080/users/user/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email,
+                    pass: pass
+                })
+            })
+            .then(response => response.json())
+            .then(user => {
+                if (!user || !user.userId) {
+                    alert("Invalid credentials");
+                    return;
+                }
+                localStorage.setItem("loggedInUser",JSON.stringify(user));
+                alert("Login successful");
+                window.location.href="admin_dashboard.html";
+
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Server error");
+            });
+    }
+
+</script>
+</body>
+</html>

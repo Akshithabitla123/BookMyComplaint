@@ -6,7 +6,10 @@ import com.example.complaintEscalation.repository.ComplaintRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -26,26 +29,23 @@ public class ComplaintService {
         return complaintRepo.findAll();
     }
 
-    //get complaint by id
-    public Complaint getById(int id){
-        return complaintRepo.findById(id).orElse(new Complaint());
+    //get all complaints by id
+    public List<Complaint> getById(int id){
+        return complaintRepo.findByUser_userId(id);
     }
 
-    //get complaint by title and description(containing)
-    public List<Complaint> getByTitleOrDescription(String title,String description){
-        return complaintRepo.findByTitleOrDescriptionContaining(title,description);
+    //get complaint by title
+    public List<Complaint> findByTitle(String title){
+        return complaintRepo.findByTitleContaining(title);
     }
 
-    //get list of complaints by its status
-    public List<Complaint> getByStatus(ComplaintStatus status){
-        return complaintRepo.findByStatus(status);
-    }
+
 
     //update status of complaint
     public Complaint updateStatus(int complaintId,ComplaintStatus status){
         Complaint complaint=complaintRepo.findById(complaintId).orElseThrow(()->new RuntimeException("Complaint not found"));
         complaint.setStatus(status);
-        complaint.setUpdatedAt(LocalDateTime.now());
+        complaint.setUpdatedAt(LocalDate.now());
         return complaintRepo.save(complaint);
     }
 
@@ -53,7 +53,7 @@ public class ComplaintService {
     public Complaint assignStaff(int complaintId, String staffName){
         Complaint complaint=complaintRepo.findById(complaintId).orElseThrow(()->new RuntimeException("Complaint not found"));
         complaint.setAssignedStaff(staffName);
-        complaint.setUpdatedAt(LocalDateTime.now());
+        complaint.setUpdatedAt(LocalDate.now());
         return complaintRepo.save(complaint);
     }
 

@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface ComplaintRepository extends JpaRepository<Complaint,Integer> {
 
-    List<Complaint> findByTitleOrDescriptionContaining(String title, String description);
+    List<Complaint> findByTitleContaining(String title);
     List<Complaint> findByStatus(ComplaintStatus status);
-
+    List<Complaint> findByUser_userId(int userId);
     List<Complaint> findByAreaIgnoreCase(String area);
     List<Complaint> findByCreatedAtBetween(LocalDateTime from,LocalDateTime to);
 

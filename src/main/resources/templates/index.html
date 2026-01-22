@@ -12,14 +12,18 @@
 
     <div class="buttons">
         <button onclick="goTo('citizen')">Citizen</button>
-        <button onclick="goTo('staff')">Staff</button>
         <button onclick="goTo('admin')">Admin</button>
     </div>
 </div>
 
 <script>
     function goTo(role){
-        window.location.href="citizen_login.html";
+        if(role==="citizen"){
+            window.location.href="citizen_login.html";
+        }
+        else{
+            window.location.href="admin_login.html";
+        }
     }
 </script>
 

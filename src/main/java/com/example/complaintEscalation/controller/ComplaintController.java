@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/complaints")
 public class ComplaintController {
@@ -28,53 +30,48 @@ public class ComplaintController {
         User user=userService.getUserById(id);
         complaint.setUser(user);
         complaint.setStatus(ComplaintStatus.OPEN);
-        complaint.setCreatedAt(LocalDateTime.now());
+        complaint.setCreatedAt(LocalDate.now());
         complaintService.save(complaint);
     }
 
+    //return all complaints of user
+    @GetMapping("/user/{id}")
+    public List<Complaint> getComplaints(@PathVariable int id){
+        return complaintService.getById(id);
+    }
+
+
+    //below APIs only for admins
     //get all complaints
-    @GetMapping("/complaints")
+    @GetMapping("/admin/complaints")
     public List<Complaint> getAllComplaints(){
         return complaintService.getAllComplaints();
     }
-
-    //get complaints by title or description
-    @GetMapping("/search")
-    public List<Complaint> getComplaintsByTitleOrDescription(@RequestParam String title,@RequestParam String description){
-        return complaintService.getByTitleOrDescription(title, description);
-    }
-
-    //get complaints by status
-    @GetMapping("/status")
-    public List<Complaint> getComplaintsByStatus(@RequestParam ComplaintStatus status){
-        return complaintService.getByStatus(status);
-    }
-
-
     //update status
-    @PutMapping("/{id}/status")
+    @PutMapping("/admin/{id}/status")
     public ResponseEntity<Complaint> updateStatus(@PathVariable int id,@RequestParam ComplaintStatus status){
         return ResponseEntity.ok(complaintService.updateStatus(id,status));
     }
 
-    //Assign staff
-    @PutMapping("/{id}/assign")
+    //Assign staff (complaint id)
+    @PutMapping("/admin/{id}/assign")
     public ResponseEntity<Complaint> assignStaff(@PathVariable int id,@RequestParam String staffName){
         return ResponseEntity.ok(complaintService.assignStaff(id,staffName));
     }
 
-    //filter complaints (only for staff)
-    @GetMapping("/staff/filter/area")
+    //filter complaints
+    @GetMapping("/admin/filter/area")
     public List<Complaint> filterByArea(@RequestParam String area){
         return complaintService.findByArea(area);
     }
-    @GetMapping("/staff/filter/status")
+    @GetMapping("/admin/filter/status")
     public List<Complaint> filterByStatus(@RequestParam ComplaintStatus status){
         return complaintService.findByStatus(status);
     }
-    @GetMapping("/staff/filter/date")
-    public List<Complaint> filterByArea(@RequestParam LocalDateTime from,@RequestParam LocalDateTime to){
-        return complaintService.findByDate(from,to);
+    //get complaints by title or description
+    @GetMapping("/admin/filter/title")
+    public List<Complaint> getComplaintsByTitle(@RequestParam String title){
+        return complaintService.findByTitle(title);
     }
 
 

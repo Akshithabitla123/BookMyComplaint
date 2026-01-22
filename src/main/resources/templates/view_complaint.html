@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
+<div class="newContainer">
     <h2>Your Complaints</h2>
     <table id="complaint_table">
         <thead>
@@ -47,7 +47,7 @@ fetch(`http://localhost:8080/complaints/user/${user.userId}`)
                     <td>${c.title}</td>
                     <td>${c.description}</td>
                     <td>${c.createdAt ? c.createdAt.replace('T',' ') : 'N/A'}</td>
-                    <td>${c.assignedStaff}</td>
+                    <td>${c.assignedStaff ? c.assignedStaff: "Yet to be assigned"}</td>
                     <td>${c.status}</td>
                     <td>${c.updatedAt ? c.updatedAt.replace('T',' ') : 'N/A'}</td>
 

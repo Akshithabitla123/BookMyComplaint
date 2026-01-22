@@ -4,7 +4,7 @@ package com.example.complaintEscalation.model;
 import com.example.complaintEscalation.enums.ComplaintStatus;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 public class Complaint {
@@ -20,8 +20,8 @@ public class Complaint {
     @Enumerated(EnumType.STRING)
     private ComplaintStatus status;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private LocalDate createdAt;
+    private LocalDate updatedAt;
     private String assignedStaff;
 
 
@@ -69,11 +69,11 @@ public class Complaint {
         this.user = user;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -86,11 +86,11 @@ public class Complaint {
         this.assignedStaff = assignedStaff;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public LocalDate getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
     }
 
