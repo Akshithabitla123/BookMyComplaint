@@ -28,6 +28,8 @@ const admin = JSON.parse(localStorage.getItem("loggedInAdmin"));
 
         data.forEach(c => {
             const row=document.createElement("tr");
+            row.ondblclick=()=>openDetails(c.complaintId);
+            row.style.cursor="pointer";
             row.innerHTML += `
                     <td>${c.complaintId}</td>
                     <td>${c.title}</td>
@@ -44,6 +46,18 @@ const admin = JSON.parse(localStorage.getItem("loggedInAdmin"));
             table.appendChild(row);
         });
     }
+
+
+//details page
+
+   function openDetails(complaintId) {
+       window.location.href = `/complaint_details.html?id=${complaintId}`;
+   }
+
+
+//    function closeModal() {
+//        document.getElementById("detailsModal").style.display = "none";
+//    }
 
 
     //on filter change

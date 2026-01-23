@@ -1,10 +1,12 @@
 package com.example.complaintEscalation.service;
 
+import com.example.complaintEscalation.dto.DetailsDto;
 import com.example.complaintEscalation.enums.ComplaintStatus;
 import com.example.complaintEscalation.model.Complaint;
 import com.example.complaintEscalation.repository.ComplaintRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -68,4 +70,8 @@ public class ComplaintService {
         return complaintRepo.findByCreatedAtBetween(from, to);
     }
 
+    //get details of the complaint (dto)
+    public DetailsDto getDetails(int id){
+        return complaintRepo.findDetails(id);
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.complaintEscalation.controller;
 
 
+import com.example.complaintEscalation.dto.DetailsDto;
 import com.example.complaintEscalation.enums.ComplaintStatus;
 import com.example.complaintEscalation.model.Complaint;
 import com.example.complaintEscalation.model.User;
@@ -73,6 +74,14 @@ public class ComplaintController {
     public List<Complaint> getComplaintsByTitle(@RequestParam String title){
         return complaintService.findByTitle(title);
     }
+
+
+    //get detailsDto of complaint
+    @GetMapping("/admin/details/{id}")
+    public DetailsDto getDetails(@PathVariable int id){
+        return complaintService.getDetails(id);
+    }
+
 
 
 

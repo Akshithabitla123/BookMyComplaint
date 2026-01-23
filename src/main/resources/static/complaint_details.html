@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Complaint Details</title>
+    <link rel="stylesheet" href="complaint_details.css">
+</head>
+<body>
+
+<div class="page">
+
+    <h1 class="page-title">Complaint Details</h1>
+
+    <!-- User Info -->
+    <div class="card">
+        <h2>User Info</h2>
+        <div class="info-grid">
+            <p><span>Name:</span> <span id="userName"></span></p>
+            <p><span>Email:</span> <span id="email"></span></p>
+            <p><span>Role:</span> <span id="role" class="badge"></span></p>
+        </div>
+    </div>
+
+    <!-- Complaint Info -->
+    <div class="card">
+        <h2>Complaint Info</h2>
+        <div class="info-grid">
+            <p><span>Title:</span> <span id="title"></span></p>
+            <p><span>Description:</span> <span id="description"></span></p>
+            <p><span>Area:</span> <span id="area"></span></p>
+            <p><span>Status:</span> <span id="status" class="badge status"></span></p>
+            <p><span>Assigned Staff:</span> <span id="assignedStaff"></span></p>
+        </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="card timeline">
+        <h2>Timeline</h2>
+        <p><strong>Created At:</strong> <span id="createdAt"></span></p>
+        <p><strong>Updated At:</strong> <span id="updatedAt"></span></p>
+    </div>
+
+    <div class="actions">
+        <button onclick="history.back()"> Back</button>
+    </div>
+
+</div>
+
+<script src="complaint_details.js"></script>
+</body>
+</html>

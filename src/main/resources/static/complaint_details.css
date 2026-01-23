@@ -1,0 +1,93 @@
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body {
+    margin: 0;
+    background: #f4f7fb;
+    color: #333;
+}
+
+.page {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.page-title {
+    text-align: center;
+    color: #0b4dbb;
+    margin-bottom: 30px;
+}
+
+/* Card Layout */
+.card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.card h2 {
+    margin-top: 0;
+    color: #0b4dbb;
+    border-bottom: 2px solid #eef2ff;
+    padding-bottom: 8px;
+}
+
+/* Info Grid */
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px 40px;
+    margin-top: 15px;
+}
+
+.info-grid p {
+    margin: 0;
+}
+
+.info-grid span:first-child {
+    font-weight: 600;
+    color: #555;
+}
+
+/* Badges */
+.badge {
+    background: #e3edff;
+    color: #0b4dbb;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 13px;
+}
+
+.status {
+    background: #e8fff0;
+    color: #1a7f37;
+}
+
+/* Timeline */
+.timeline p {
+    margin: 10px 0;
+}
+
+/* Actions */
+.actions {
+    text-align: center;
+}
+
+.actions button {
+    background: #0b4dbb;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.actions button:hover {
+    background: #083b8f;
+}

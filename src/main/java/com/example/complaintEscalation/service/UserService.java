@@ -1,10 +1,12 @@
 package com.example.complaintEscalation.service;
 
 
+import com.example.complaintEscalation.dto.DetailsDto;
 import com.example.complaintEscalation.model.User;
 import com.example.complaintEscalation.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -45,4 +47,7 @@ public class UserService {
     public User login(String email, String pass) {
         return userRepo.findByEmailAndPass(email,pass);
     }
+
+
+
 }
