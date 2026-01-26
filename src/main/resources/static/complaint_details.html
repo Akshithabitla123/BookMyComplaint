@@ -27,7 +27,15 @@
             <p><span>Title:</span> <span id="title"></span></p>
             <p><span>Description:</span> <span id="description"></span></p>
             <p><span>Area:</span> <span id="area"></span></p>
-            <p><span>Status:</span> <span id="status" class="badge status"></span></p>
+            <p class="status-row">
+                <span>Status:</span>
+
+                <span id="status" class="badge status"></span>
+
+                <select id="statusSelect" onchange="changeStatus()">
+                </select>
+            </p>
+<!--            <p><span>Status:</span> <span id="status" class="badge status"></span></p>-->
             <p><span>Assigned Staff:</span> <span id="assignedStaff"></span></p>
         </div>
     </div>

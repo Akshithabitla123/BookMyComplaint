@@ -48,6 +48,7 @@ public class ComplaintController {
     public List<Complaint> getAllComplaints(){
         return complaintService.getAllComplaints();
     }
+
     //update status
     @PutMapping("/admin/{id}/status")
     public ResponseEntity<Complaint> updateStatus(@PathVariable int id,@RequestParam ComplaintStatus status){

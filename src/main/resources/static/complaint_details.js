@@ -1,39 +1,96 @@
-// Get complaintId from URL
-const params = new URLSearchParams(window.location.search);
-const complaintId = params.get("id");
+document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const complaintId = params.get("id");
 
-if (!complaintId) {
-    alert("Invalid complaint ID");
-}
+    if (!complaintId) return;
 
-// Fetch complaint details
-fetch(`http://localhost:8080/complaints/admin/details/${complaintId}`)
-    .then(res => res.json())
-    .then(data => {
-        console.log("Details:", data);
+    fetch(`http://localhost:8080/complaints/admin/details/${complaintId}`)
+        .then(res => res.json())
+        .then(data => {
+            // SAFE DATA MAPPING - If an ID is missing in HTML, it won't crash the script
+            const updateText = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.innerText = value || "N/A";
+            };
 
-        document.getElementById("userName").innerText = data.userName;
-        document.getElementById("email").innerText = data.email;
-        document.getElementById("role").innerText = data.role;
+            updateText("userName", data.userName);
+            updateText("email", data.email);
+            updateText("role", data.role);
+            updateText("title", data.title);
+            updateText("description", data.description);
+            updateText("area", data.area);
+            updateText("status", data.status);
+            updateText("assignedStaff", data.assignedStaff || "Not Assigned");
 
-        document.getElementById("title").innerText = data.title;
-        document.getElementById("description").innerText = data.description;
-        document.getElementById("area").innerText = data.area;
-        document.getElementById("status").innerText = data.status;
-        document.getElementById("assignedStaff").innerText =
-            data.assignedStaff ? data.assignedStaff : "Not Assigned";
+            // FORMAT DATES
+            const createdAt = data.createdAt ? new Date(data.createdAt).toLocaleString() : "N/A";
+            updateText("createdAt", createdAt);
+            const updatedAt = data.updatedAt ? new Date(data.updatedAt).toLocaleString() : "N/A";
+            updateText("updatedAt", updatedAt);
 
-        document.getElementById("createdAt").innerText = formatDate(data.createdAt);
-        document.getElementById("updatedAt").innerText = formatDate(data.updatedAt);
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Failed to load complaint details");
+            // CALL THE DROPDOWN LOGIC
+            setupStatusDropdown(data.status);
+        })
+        .catch(err => console.error("Load Error:", err));
+});
+
+// Setup dropdown based on current status
+function setupStatusDropdown(currentStatus) {
+    const select = document.getElementById("statusSelect");
+    if (!select) return;
+
+    // Normalize string to handle any casing from API
+    const status = currentStatus ? currentStatus.toUpperCase().trim() : "";
+
+    select.innerHTML = "";
+    let options = [];
+
+    if (status === "OPEN") {
+        options = ["IN_PROGRESS", "REJECTED"];
+    } else if (status === "IN_PROGRESS") {
+        options = ["RESOLVED", "REJECTED"];
+    } else {
+        // If status is RESOLVED or REJECTED, hide the dropdown
+        select.style.display = "none";
+        return;
+    }
+
+    // Ensure it's visible if we have options
+    select.style.display = "inline-block";
+
+    const placeholder = document.createElement("option");
+    placeholder.textContent = "Escalate Status";
+    placeholder.disabled = true;
+    placeholder.selected = true;
+    select.appendChild(placeholder);
+
+    options.forEach(opt => {
+        const o = document.createElement("option");
+        o.value = opt;
+        o.textContent = opt.replace("_", " ");
+        select.appendChild(o);
     });
-
-function formatDate(dateStr) {
-    if (!dateStr) return "N/A";
-    return new Date(dateStr).toLocaleString();
 }
 
+// Global function for the onchange event
+window.changeStatus = function () {
+    const select = document.getElementById("statusSelect");
+    const newStatus = select.value;
+    const complaintId = new URLSearchParams(window.location.search).get("id");
 
+    if (!newStatus) return;
+
+    fetch(`http://localhost:8080/complaints/admin/${complaintId}/status?status=${newStatus}`, {
+        method: "PUT"
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Update failed");
+        return res.json();
+    })
+    .then(updated => {
+        document.getElementById("status").innerText = updated.status;
+        setupStatusDropdown(updated.status); // Refresh options
+        alert("Status updated successfully!");
+    })
+    .catch(err => alert(err.message));
+};
