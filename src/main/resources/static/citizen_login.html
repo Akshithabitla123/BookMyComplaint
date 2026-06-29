@@ -25,7 +25,7 @@
         const pass=document.getElementById("pass").value;
         if(!email || !pass){
             alert("Credentials missing");
-<!--            return;-->
+           return;
         }
         fetch("http://localhost:8080/users/user/login", {
                 method: "POST",
@@ -41,6 +41,10 @@
             .then(user => {
                 if (!user || !user.userId) {
                     alert("Invalid credentials");
+                    return;
+                }
+                if(user.role!=="CITIZEN"){
+                    alert("Only Citizens can access it");
                     return;
                 }
                 localStorage.setItem("loggedInUser",JSON.stringify(user));

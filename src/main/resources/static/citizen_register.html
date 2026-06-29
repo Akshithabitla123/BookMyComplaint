@@ -51,7 +51,9 @@
                 alert("Registration successful");
                 window.location.href = "citizen_dashboard.html";
             } else {
-                alert("Registration failed");
+                return response.json().then(data=>{
+                    alert(data.error || "Registration failed");
+                });
             }
         })
         .catch(error => {

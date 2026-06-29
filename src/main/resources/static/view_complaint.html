@@ -35,13 +35,13 @@ fetch(`http://localhost:8080/complaints/user/${user.userId}`)
     .then(response => response.json())
     .then(data => {
         const table = document.getElementById("complaint_table");
-
-        if(data.length === 0){
-            table.innerHTML += `<tr><td colspan="4">No complaints found</td></tr>`;
+        const complaints=data.content;
+        if(complaints.length === 0){
+            table.innerHTML += `<tr><td colspan="6">No complaints found</td></tr>`;
             return;
         }
 
-        data.forEach(c => {
+        complaints.forEach(c => {
             const row = `
                 <tr>
                     <td>${c.title}</td>
@@ -56,6 +56,7 @@ fetch(`http://localhost:8080/complaints/user/${user.userId}`)
             table.innerHTML += row;
         });
     })
+    .catch(err=>console.error("Error loading complaints: ",err));
 
 
     function back() {

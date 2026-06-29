@@ -12,6 +12,14 @@
     <textarea id="description" placeholder="Description"></textarea>
     <input type="text" id="area" placeholder="Area">
 
+    <div class="priority-group">
+        <label for="priority">How Urgent is this? (If its not that urgent, please select low or medium)</label>
+        <select id="priority">
+        <option value="LOW">Low - can wait for 2-3 days</option>
+        <option value="MEDIUM" selected>Medium - can wait for 1-2 days</option>
+        <option value="HIGH">High</option>
+    </select>
+    </div>
     <div class="buttons">
         <button onclick="submit()">Submit</button>
     </div>
@@ -31,8 +39,9 @@ function submit(){
     const title=document.getElementById("title").value;
     const description=document.getElementById("description").value;
     const area=document.getElementById("area").value;
+    const priority=document.getElementById("priority").value;
 
-    if(!title || !description || !area){
+    if(!title.trim() || !description.trim() || !area.trim()){
         alert("Required fields missing");
         return;
     }
@@ -45,7 +54,8 @@ function submit(){
         body: JSON.stringify({
             title:title,
             description:description,
-            area:area
+            area:area,
+            priority:priority
         })
     })
     .then(response=>{
@@ -53,8 +63,10 @@ function submit(){
             alert("Complaint submitted successfully");
             window.location.href="citizen_dashboard.html";
         }else{
-            alert("Failed to submit complaint");
-            window.location.href="create_complaint.html";
+            return response.json().then(errors=>{
+                const message=Object.values(Error).join("\n");
+                alert(message || "Faled to submit complaint");
+            });
         }
     })
     .catch(error=>{

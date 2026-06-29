@@ -1,27 +1,41 @@
 package com.example.complaintEscalation.model;
 
 
-import com.example.complaintEscalation.enums.ComplaintStatus;
-import jakarta.persistence.*;
-
 import java.time.LocalDate;
+
+import com.example.complaintEscalation.enums.ComplaintStatus;
+import com.example.complaintEscalation.enums.Priority;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Complaint {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int complaintId;
-
+    @NotBlank(message = "Title is required")
     private String title;
+    @NotBlank(message="Description is required")
     private String description;
+    @NotBlank(message="Area is required")
     private String area;
 
     @Enumerated(EnumType.STRING)
     private ComplaintStatus status;
-
+    @Enumerated(EnumType.STRING)
+    private Priority priority;
     private LocalDate createdAt;
     private LocalDate updatedAt;
+    private LocalDate escalatedAt;
     private String assignedStaff;
 
 
@@ -101,4 +115,22 @@ public class Complaint {
     public void setArea(String area) {
         this.area = area;
     }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
+    }
+
+    public LocalDate getEscalatedAt() {
+        return escalatedAt;
+    }
+
+    public void setEscalatedAt(LocalDate escalatedAt) {
+        this.escalatedAt = escalatedAt;
+    }
+    
+    
 }

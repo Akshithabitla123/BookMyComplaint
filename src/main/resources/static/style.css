@@ -52,6 +52,36 @@ input {
     font-size: 14px;
 }
 
+.priority-group {
+    width: 100%;
+    margin: 12px 0 20px;
+    text-align: left;
+}
+
+.priority-group label {
+    display: block;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.priority-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.priority-group select:focus {
+    outline: none;
+    border-color: #4f63f5;
+    box-shadow: 0 0 0 2px rgba(79, 99, 245, 0.15);
+}
+
 .back {
     margin-top: 15px;
     color: #4a6cff;

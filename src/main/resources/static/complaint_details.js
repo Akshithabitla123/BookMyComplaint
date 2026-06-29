@@ -29,19 +29,32 @@ document.addEventListener("DOMContentLoaded", () => {
             updateText("updatedAt", updatedAt);
 
             // CALL THE DROPDOWN LOGIC
-            setupStatusDropdown(data.status);
+            setupStatusDropdown(data.status,complaintId);
         })
         .catch(err => console.error("Load Error:", err));
 });
 
 // Setup dropdown based on current status
-function setupStatusDropdown(currentStatus) {
+function setupStatusDropdown(currentStatus,complaintId) {
     const select = document.getElementById("statusSelect");
     if (!select) return;
 
     // Normalize string to handle any casing from API
     const status = currentStatus ? currentStatus.toUpperCase().trim() : "";
 
+    const existingBtn=document.getElementById("reviewBtn");
+    if(existingBtn) existingBtn.remove();
+    
+    if(status==="ESCALATED"){
+        //escalated complaints get review button
+        select.style.display="none";
+        const reviewBtn=document.createElement("button");
+        reviewBtn.id="reviewBtn";
+        reviewBtn.textContent="Review Escalation";
+        reviewBtn.onclick=()=>reviewEscalation(complaintId);
+        select.parentNode.appendChild(reviewBtn);
+        return;
+    }
     select.innerHTML = "";
     let options = [];
 
@@ -70,6 +83,27 @@ function setupStatusDropdown(currentStatus) {
         o.textContent = opt.replace("_", " ");
         select.appendChild(o);
     });
+}
+
+//review escalation
+function reviewEscalation(complaintId){
+    fetch(`http://localhost:8080/complaints/admin/${complaintId}/review`,{
+        method:"PUT"
+    })
+    .then(res=>{
+        if(!res.ok){
+            return res.json().then(data=>{
+                throw new Error(data.error || "Review failed");
+            });
+        }
+        return res.json();
+    })
+    .then(updated=>{
+        document.getElementById("status").innerText=updated.status;
+        setupStatusDropdown(updated.status,complaintId);
+        alert("Complaint reviewed- now IN_PROGRESS");
+    })
+    .catch(err=>alert(err.message));
 }
 
 // Global function for the onchange event

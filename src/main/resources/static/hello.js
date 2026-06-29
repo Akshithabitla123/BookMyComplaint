@@ -1,8 +1,8 @@
-const admin = JSON.parse(localStorage.getItem("loggedInAdmin"));
-//<!--    if(!admin){-->
-//<!--        alert("Admin login required");-->
-//<!--        window.location.href = "admin_login.html";-->
-//<!--    }-->
+const admin = JSON.parse(localStorage.getItem("loggedInUser"));
+    if(!admin){
+        alert("Admin login required");
+        window.location.href = "admin_login.html";
+    }
 
     loadComplaints();
 
@@ -22,7 +22,7 @@ const admin = JSON.parse(localStorage.getItem("loggedInAdmin"));
                 <th>Area</th>
                 <th>Status</th>
                 <th>Assigned Staff</th>
-                <th>Assign Staff</th>
+                <th>Action</th>
             </tr>
         `;
 
@@ -30,18 +30,26 @@ const admin = JSON.parse(localStorage.getItem("loggedInAdmin"));
             const row=document.createElement("tr");
             row.ondblclick=()=>openDetails(c.complaintId);
             row.style.cursor="pointer";
+
+            //action-> for reviewing or assigning staff
+            const statusCell=c.status==="ESCALATED"? `<span style="color:#b00020;font-weight:bold;">${c.status}</span>` : c.status;
+            let actionCell;
+            if(c.status==="ESCALATED"){
+                actionCell=`<button onclick="reviewComplaint(${c.complaintId})">Review</button>`;
+            }
+            else if(c.assignedStaff){
+                actionCell="";
+            }
+            else{
+                actionCell=`<input type="text" id="staff-${c.complaintId}" placeholder="Staff Name"> <button onclick="assignStaff(${c.complaintId})">Assign</button>`;
+            }
             row.innerHTML += `
                     <td>${c.complaintId}</td>
                     <td>${c.title}</td>
                     <td>${c.area}</td>
                     <td>${c.status}</td>
                     <td>${c.assignedStaff ? c.assignedStaff : "Not Assigned"}</td>
-                    <td>
-                        ${
-                            c.assignedStaff?"":`<input type="text" id="staff-${c.complaintId}" placeholder="Staff Name"> <button onclick="assignStaff(${c.complaintId})">Assign</button>`
-                        }
-
-                    </td>
+                    <td>${actionCell}</td>
             `;
             table.appendChild(row);
         });
@@ -107,7 +115,29 @@ const admin = JSON.parse(localStorage.getItem("loggedInAdmin"));
           });
     }
 
-//<!--    Apply filters-->
+
+    function reviewComplaint(complaintId){
+        fetch(`http://localhost:8080/complaints/admin/${complaintId}/review`,{
+            method:"PUT"
+        })
+        .then(res=>{
+            if(res.ok){
+                alert("Complaint reviewed now IN_PROGRESS");
+                loadComplaints();
+            }
+            else{
+                return res.json().then(data=>{
+                    alert(data.error || "Review failed");
+                });
+            }
+        })
+        .catch(error=>{
+            console.error("Error: ",error);
+            alert("Server error");
+        });
+    }
+
+//   Apply filters
     function applyFilter(){
         const filterType = document.getElementById("filterType").value;
             let value = "";
@@ -132,11 +162,11 @@ const admin = JSON.parse(localStorage.getItem("loggedInAdmin"));
 
         fetch(url)
             .then(res => res.json())
-            .then(data => renderTable(data))
+            .then(data => renderTable(data.content))
             .catch(err => alert("Filter failed"));
     }
     function logout(){
-//<!--        local storage is per browser per domain-->
-        localStorage.removeItem("loggedInAdmin");
+//        local storage is per browser per domain
+        localStorage.removeItem("loggedInUser");
         window.location.href = "index.html";
     }

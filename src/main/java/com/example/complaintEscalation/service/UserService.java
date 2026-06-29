@@ -1,30 +1,29 @@
 package com.example.complaintEscalation.service;
 
-
-import com.example.complaintEscalation.dto.DetailsDto;
-import com.example.complaintEscalation.model.User;
-import com.example.complaintEscalation.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-
 import java.util.List;
 
-@Service
-public class UserService {
+import org.springframework.stereotype.Service;
 
-    @Autowired
-    private UserRepository userRepo;
+import com.example.complaintEscalation.exceptions.InvalidRequestException;
+import com.example.complaintEscalation.model.User;
+import com.example.complaintEscalation.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class UserService {
+    private final UserRepository userRepo;
 
     //save user
     public String saveUser(User user){
 
         if(userRepo.existsByEmail(user.getEmail())){
-            throw new RuntimeException("Email already exists");
+            throw new InvalidRequestException("Email already exists");
         }
 
         if(userRepo.existsByUserName(user.getUserName())){
-            throw new RuntimeException("User name already exists");
+            throw new InvalidRequestException("User name already exists");
         }
 
         userRepo.save(user);

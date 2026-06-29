@@ -17,13 +17,12 @@
 </div>
 
 <script>
-    const userId=localStorage.getItem("userId");
-    const role=localStorage.getItem("role");
+    const loggedInUser=JSON.paarse(localStorage.getItem("loggedInUser"));
 
-<!--    if(!userId || role!=="CITIZEN"){-->
-<!--        alert("Unauthorized access");-->
-<!--        window.location.href="citizen_login.html";-->
-<!--    }-->
+    if(!loggedInUser || loggedInUser.role!=="CITIZEN"){
+        alert("Unauthorized access");
+        window.location.href="citizen_login.html";
+    }
 
     function goToCreate(){
         window.location.href="create_complaint.html";
