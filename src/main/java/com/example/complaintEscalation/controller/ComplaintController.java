@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.complaintEscalation.dto.DetailsDto;
 import com.example.complaintEscalation.enums.ComplaintStatus;
+import com.example.complaintEscalation.enums.NotificationType;
 import com.example.complaintEscalation.enums.Priority;
 import com.example.complaintEscalation.exceptions.InvalidRequestException;
 import com.example.complaintEscalation.model.Complaint;
 import com.example.complaintEscalation.model.User;
 import com.example.complaintEscalation.service.ComplaintService;
+import com.example.complaintEscalation.service.NotificationService;
 import com.example.complaintEscalation.service.UserService;
 
 import jakarta.validation.Valid;
@@ -37,6 +39,7 @@ import lombok.RequiredArgsConstructor;
 public class ComplaintController {
     private final UserService userService;
     private final ComplaintService complaintService;
+    private final NotificationService notificationService;
 
     //citizen creates a complaint
     @PostMapping("/user/{id}")
@@ -57,6 +60,8 @@ public class ComplaintController {
             complaint.setPriority(Priority.MEDIUM);
         }
         complaintService.save(complaint);
+        String msg="Your Complaint "+complaint.getTitle()+" has been submitted successfully";
+        notificationService.createNotification(user, msg, NotificationType.COMPLAINT_SUBMITTED, complaint.getComplaintId());
         return ResponseEntity.ok(Map.of("message","Complaint submitted successfully"));
     }
 
@@ -77,13 +82,19 @@ public class ComplaintController {
     //update status
     @PutMapping("/admin/{id}/status")
     public ResponseEntity<Complaint> updateStatus(@PathVariable int id,@RequestParam ComplaintStatus status){
-        return ResponseEntity.ok(complaintService.updateStatus(id,status));
+        Complaint updated=complaintService.updateStatus(id,status);
+        String msg="Your complaint "+updated.getTitle()+"'s status has been updated to"+status+".";
+        notificationService.createNotification(updated.getUser(), msg,NotificationType.STATUS_UPDATED,updated.getComplaintId());
+        return ResponseEntity.ok(updated);
     }
 
     //Assign staff (complaint id)
     @PutMapping("/admin/{id}/assign")
     public ResponseEntity<Complaint> assignStaff(@PathVariable int id,@RequestParam String staffName){
-        return ResponseEntity.ok(complaintService.assignStaff(id,staffName));
+        Complaint updated=complaintService.assignStaff(id, staffName);
+        String msg="Staff "+staffName+"has been assigned to your complaint "+updated.getTitle()+".";
+        notificationService.createNotification(updated.getUser(), msg, NotificationType.STAFF_ASSIGNED,updated.getComplaintId());
+        return ResponseEntity.ok(updated);
     }
     //review the escalted complaints and change the status to IN_PROGRESS
     @PutMapping("/admin/{id}/review")

@@ -13,11 +13,13 @@ import org.springframework.stereotype.Service;
 
 import com.example.complaintEscalation.dto.DetailsDto;
 import com.example.complaintEscalation.enums.ComplaintStatus;
+import com.example.complaintEscalation.enums.NotificationType;
 import com.example.complaintEscalation.enums.Priority;
 import com.example.complaintEscalation.exceptions.InvalidRequestException;
 import com.example.complaintEscalation.exceptions.ResourceNotFoundException;
 import com.example.complaintEscalation.model.Complaint;
 import com.example.complaintEscalation.repository.ComplaintRepository;
+import com.example.complaintEscalation.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ComplaintService {
     private final ComplaintRepository complaintRepo;
+    private final NotificationService notificationService;
+    private final UserRepository userRepo;
     private static final Logger log=LoggerFactory.getLogger(ComplaintService.class);
     //save complaint
     public String save(Complaint complaint){
@@ -132,6 +136,12 @@ public class ComplaintService {
             c.setStatus(ComplaintStatus.ESCALATED);
             c.setEscalatedAt(LocalDate.now());
             complaintRepo.save(c);
+            String msg="Your complaint "+c.getTitle()+" has been escalated due to no resolution within expected timeframe";
+            notificationService.createNotification(c.getUser(), msg,NotificationType.COMPLAINT_ESCALATED,c.getComplaintId());
+            //notify all admins
+             String adminMsg="Complaint "+c.getComplaintId()+" '"+c.getTitle()+"' ("+c.getPriority() +" priority) has been auto-escalated "+"and requires admin review.";
+            userRepo.findByRole("ADMIN").forEach(admin->
+                notificationService.createNotification(admin, adminMsg,NotificationType.REVIEW_REQUIRED,c.getComplaintId()));
         }
         return overdue.size();
     }
