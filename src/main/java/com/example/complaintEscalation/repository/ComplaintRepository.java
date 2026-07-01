@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.example.complaintEscalation.dto.DetailsDto;
 import com.example.complaintEscalation.enums.ComplaintStatus;
@@ -43,5 +44,11 @@ public interface ComplaintRepository extends JpaRepository<Complaint,Integer> {
         WHERE c.complaintId = :id
     """)
     DetailsDto findDetails(int id);
+
+    //counting no. of complaints per user which are open
+    @Query("SELECT COUNT(c) FROM Complaint c WHERE c.user.userId=:userId "+
+        "AND c.status IN ('OPEN','IN_PROGRESS','ESCALATED')")
+    int countActiveComplaintsByUser(@Param("userId") int userId);
+
 
 }

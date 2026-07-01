@@ -135,4 +135,9 @@ public class ComplaintService {
         }
         return overdue.size();
     }
+
+    //rate limiting-> returns active complaints of user
+    public int countActiveComplaints(int userId){
+        return complaintRepo.countActiveComplaintsByUser(userId);
+    }
 }

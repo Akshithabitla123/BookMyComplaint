@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.complaintEscalation.dto.DetailsDto;
 import com.example.complaintEscalation.enums.ComplaintStatus;
 import com.example.complaintEscalation.enums.Priority;
+import com.example.complaintEscalation.exceptions.InvalidRequestException;
 import com.example.complaintEscalation.model.Complaint;
 import com.example.complaintEscalation.model.User;
 import com.example.complaintEscalation.service.ComplaintService;
@@ -39,8 +40,16 @@ public class ComplaintController {
 
     //citizen creates a complaint
     @PostMapping("/user/{id}")
-    public void createComplaint(@PathVariable int id, @Valid @RequestBody Complaint complaint){
+    public ResponseEntity<Map<String,String>> createComplaint(@PathVariable int id, @Valid @RequestBody Complaint complaint){
         User user=userService.getUserById(id);
+        //check count of complaints of current user
+        int activeComplaints=complaintService.countActiveComplaints(id);
+        if(activeComplaints>=5){
+            throw new InvalidRequestException("You have reached the maximum limit of 5 active complaints. "+
+                "Please wait for your existing complaints to be resolved before submitting new ones."
+            );
+
+        }
         complaint.setUser(user);
         complaint.setStatus(ComplaintStatus.OPEN);
         complaint.setCreatedAt(LocalDate.now());
@@ -48,6 +57,7 @@ public class ComplaintController {
             complaint.setPriority(Priority.MEDIUM);
         }
         complaintService.save(complaint);
+        return ResponseEntity.ok(Map.of("message","Complaint submitted successfully"));
     }
 
     //return all complaints of user
@@ -106,7 +116,5 @@ public class ComplaintController {
         int count=complaintService.runEscalation();
         return ResponseEntity.ok(Map.of("escalatedCount",count));
     }
-
-
 
 }

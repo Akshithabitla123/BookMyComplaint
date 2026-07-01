@@ -63,9 +63,13 @@ function submit(){
             alert("Complaint submitted successfully");
             window.location.href="citizen_dashboard.html";
         }else{
-            return response.json().then(errors=>{
-                const message=Object.values(Error).join("\n");
-                alert(message || "Faled to submit complaint");
+            return response.json().then(data=>{
+                const message=data.error || "Faled to submit complaint";
+                if(data.error && data.error.includes("maximum limit")){
+                    alert(message+"\n\nGo to 'View My Complaints' to check the status of your existing complaints.");
+                }else{
+                    alert(message);
+                }
             });
         }
     })
